@@ -21,7 +21,7 @@ const Login = () => {
         <p className='text-2xl font-semibold'>{loginState === 'Sign Up' ? 'Create Account' : 'Login'}</p>
         <p>Please {loginState === 'Sign Up' ? 'sign up' : 'log in'} </p>
         {
-          loginState === "Sign up" && <div className='w-full' >
+          loginState === "Sign Up" && <div className='w-full' >
           <p>Full Name</p>
           <input className='border border-zinc-300 rounded w-full p-2 mt-1' type="text" onChange={(e)=>setName(e.target.name)} value={name}  required/>
         </div>
