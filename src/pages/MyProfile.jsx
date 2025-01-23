@@ -1,27 +1,80 @@
-import React, { useState } from 'react'
-import { assets } from '../assests/assets'
+import React, { useContext, useState } from 'react'
+// import { assets } from '../assests/assets'
+import { AppContext } from '@/context/AppContext.jsx'
+import { assets } from '@/assests/assets'
+import { fromJSON } from 'postcss'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const MyProfile = () => {
 
-  const [userData, setUserData] = useState({
-    name: "Deep Patel",
-    image: assets.profile_pic,
-    email: 'deppatel@outlook.com',
-    phone: '+91 9854126588',
-    address: {
-      line1: "Aazad chok,rajori",
-      line2: "behind lokmanya marge,Maharastra"
-    },
-    gender: 'Male',
-    DOB: '1994-02-28'
-  })
+  //temp data
+  // const [userData, setUserData] = useState({
+  //   name: "Deep Patel",
+  //   image: assets.profile_pic,
+  //   email: 'deppatel@outlook.com',
+  //   phone: '+91 9854126588',
+  //   address: {
+  //     line1: "Aazad chok,rajori",
+  //     line2: "behind lokmanya marge,Maharastra"
+  //   },
+  //   gender: 'Male',
+  //   DOB: '1994-02-28'
+  // })
+
+  const {userData,setUserData ,token ,backendUrl ,loadUserProfileData} = useContext(AppContext)
 
   const [edit, setEdit] = useState(false)
 
+  const [image, setImage ] = useState(false)
 
-  return (
+  const updateUserProfileData = async () => {
+    try {
+      
+      const formData = new formData()
+
+      formData.append('name',userData.name)
+      formData.append('phone',userData.phone)
+      formData.append('address',JSON.stringify(userData.address))
+      formData.append('gender',userData.gender)
+      formData.append('dob',userData.dob)
+
+      image && formData.append('image',image)
+
+      const {data} = await axios.post(backendUrl + '/api/user/update-profile',formData,{headers:{token}})
+
+      if(data){
+        toast.success(data.message)
+        await loadUserProfileData()
+        setEdit(false)
+      }
+      else{
+        console.log("error",error)
+        toast.error(data.message)
+      }
+    } catch (error) {
+      console.log("error in updating profile", error)
+      toast.error(error.message)
+
+    }
+  }
+
+
+  return userData &&  (
     <div className='flex flex-col gap-2 max-w-lg text-sm'>
-      <img src={userData.image} className='w-36 rounded' alt="" />
+
+      {
+        edit ? 
+        <label htmlFor="image">
+          <div className='inline-block cursor-pointer relative'>
+            <img src={image ? URL.createObjectURL(image) : userData.image} alt="" className='w-36 rounded opacity-75' />
+            <img src={image ? '' : assets.upload_icon} alt="" className='w-10 absolute bottom-12 right-12' />
+          </div>
+          <input onChange={(e) => setImage(e.target.files[0])} type="file" id='image' hidden />
+        </label> : <img src={userData.image} className='w-36 rounded' alt="" />
+      }
+
+
       {
         edit
           ? <input type="text" value={userData.name} onChange={e => setUserData(prev => ({ ...prev, name: e.target.value }))} className='bg-gray-50 text-3xl font-medium max-w-60 mt-4' />
@@ -77,7 +130,7 @@ const MyProfile = () => {
       <div className='mt-10'>
         {
           edit 
-          ?<button className='border border-primary px-8 py-2 rounded-full hover:bg-blue-600 hover:text-white transition-all' onClick={()=>setEdit(false)}>Save</button> 
+          ?<button className='border border-primary px-8 py-2 rounded-full hover:bg-blue-600 hover:text-white transition-all' onClick={updateUserProfileData}>Save</button> 
           :<button className='border border-primary px-8 py-2 rounded-full hover:bg-blue-600 hover:text-white transition-all' onClick={()=>setEdit(true)}>Edit</button>
         }
       </div>
