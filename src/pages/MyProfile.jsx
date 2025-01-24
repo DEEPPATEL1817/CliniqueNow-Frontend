@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 // import { assets } from '../assests/assets'
 import { AppContext } from '@/context/AppContext.jsx'
 import { assets } from '@/assests/assets'
-import { fromJSON } from 'postcss'
+
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -31,11 +31,12 @@ const MyProfile = () => {
   const updateUserProfileData = async () => {
     try {
       
-      const formData = new formData()
+      const formData = new FormData()
 
       formData.append('name',userData.name)
       formData.append('phone',userData.phone)
-      formData.append('address',JSON.stringify(userData.address))
+      console.log("Address before sending:", userData.address);
+      formData.append('address',userData.address)
       formData.append('gender',userData.gender)
       formData.append('dob',userData.dob)
 
@@ -96,14 +97,14 @@ const MyProfile = () => {
           {
             edit
               ? <p>
-                <input type="text" value={userData.address.line1} onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, line1: e.target.value } }))} className='bg-gray-100' />
+                <input type="text" value={userData.address} onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address  } }))} className='bg-gray-100' />
                 <br />
-                <input type="text" value={userData.address.line2} onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, line2: e.target.value } }))} className='bg-gray-100' />
+                {/* <input type="text" value={userData.address.line2} onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, line2: e.target.value } }))} className='bg-gray-100' /> */}
               </p>
               : <p className='text-gray-500'>
-                {userData.address.line1}
+                {userData.address}
                 <br />
-                {userData.address.line2}
+                {/* {userData.address.line2} */}
               </p>
           }
         </div>
@@ -122,8 +123,8 @@ const MyProfile = () => {
           }
           <p className='font-medium '>DOB:</p>
           {
-            edit ? <input type="date" value={userData.DOB} onChange={(e) => setUserData(prev => ({ ...prev, DOB: e.target.value }))} className='max-w-28 bg-gray-100'/> 
-            : <p className='text-gray-400'>{userData.DOB}</p>
+            edit ? <input type="date" value={userData.dob || ""} onChange={(e) => setUserData(prev => ({ ...prev, dob: e.target.value }))} className='max-w-28 bg-gray-100'/> 
+            : <p className='text-gray-400'>{userData.dob}</p>
           }
         </div>
       </div>
