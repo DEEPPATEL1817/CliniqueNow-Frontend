@@ -22,6 +22,7 @@ const AppContextProvider = (props) =>{
         try {
             console.log('fetching doctor from :',backendUrl + '/api/doctor/list')
             const {data} = await axios.get(backendUrl + '/api/doctor/list')
+            console.log("doctors data" , data)
             if (data) {
                 setDoctors(data.doctors)
             }
@@ -51,7 +52,7 @@ const AppContextProvider = (props) =>{
     }
 
     const value= {
-        doctors, currencySymbol, token, setToken, backendUrl,userData,setUserData,loadUserProfileData
+        doctors, getDoctorsData, currencySymbol, token, setToken, backendUrl,userData,setUserData,loadUserProfileData
     }
 
 
