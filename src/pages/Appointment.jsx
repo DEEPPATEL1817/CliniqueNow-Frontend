@@ -10,7 +10,7 @@ import axios from 'axios'
 const Appointment = () => {
 
   const { docId } = useParams()
-  const { doctors, currencySymbol, backendUrl,token ,getDoctorsData } = useContext(AppContext)
+  const { doctors, currencySymbol, backendUrl,token , getDoctorsData } = useContext(AppContext)
 
   const [docInfo, setDocInfo] = useState(null)
   const [docSlot, setDocSlot] = useState([])
@@ -25,7 +25,7 @@ const Appointment = () => {
     const docInfo = doctors.find(doc => doc._id === docId)
     setDocInfo(docInfo)
 
-    console.log(docInfo)
+    console.log("doctorInformation",docInfo)
   }
 
   const getAvailableSlots = async () => {
@@ -66,7 +66,7 @@ const Appointment = () => {
         const slotDate = day + "_" + month + "_" + year
         const slotTime = formattedTime
 
-        const isSlotAvailable = docInfo.slots_Booked && docInfo.slots_Booked[slotDate] && !docInfo.slots_Booked[slotDate].includes(slotTime) ? false : true
+        const isSlotAvailable = docInfo.slots_booked[slotDate] && docInfo.slots_booked[slotDate].includes(slotTime) ? false : true
 
 
         if(isSlotAvailable){
@@ -92,6 +92,7 @@ const Appointment = () => {
       toast.warn('login to book appointment')
       return navigate('/login')
     }
+    console.log("tokenOfappointment:",token)
     try {
       const date = docSlot[slotIndex][0].datetime
 
@@ -103,8 +104,8 @@ const Appointment = () => {
 
       console.log(slotDate)
 
-      const {data} = await axios.post(backendUrl + '/api/user/book-appointment',{docId,slotDate,slotTime},{headers:{token}})
-
+      const {data} = await axios.post(backendUrl + '/api/user/book-appointment',{docId, slotDate, slotTime},{headers:{token}})
+      console.log("data of doctors appointment",data)
       if(data){
         toast.success(data.message)
         console.log("data data",data)
@@ -131,7 +132,7 @@ const Appointment = () => {
   }, [docInfo])
 
   useEffect(() => {
-    console.log(docSlot)
+    console.log("doctor slot info",docSlot)
   }, [docSlot])
 
   return docInfo && (

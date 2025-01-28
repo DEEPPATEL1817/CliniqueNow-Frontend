@@ -11,15 +11,22 @@ const MyAppointment = () => {
 
   const months = ["",'Jan',"Feb","March","April","May","Jun","July","Aug","Sep","Oct","Nov","Dec"]
 
+  // const slotDateFormat = (slotDate) => {
+  //   const dateArray = slotDate.split('_')
+  //     return dateArray[0] + " " + months[Number(dateArray[1]) + " " + dateArray[2]]
+  // }
+
+
   const slotDateFormat = (slotDate) => {
-    const dateArray = slotDate.split('_')
-      return dateArray[0] + " " + months[Number(dateArray[1]) + " " + dateArray[2]]
-  }
+    const dateArray = slotDate.split('_');
+    return dateArray[0] + " " + months[Number(dateArray[1])] + " " + dateArray[2];
+  };
+  
 
   const getUserAppointments = async () =>  {
     try {
       const {data} = await axios.get(backendUrl + '/api/user/appointments',{headers:{token}})
-      console.log("dd",data)
+      console.log("data of user appointment",data)
       if (data) {
         setAppointments(data.appointments.reverse())
         console.log("all appointments",appointments)
@@ -33,6 +40,7 @@ const MyAppointment = () => {
   useEffect(()=>{
     if(token){
       getUserAppointments()
+      
     }
   },[token])
 
