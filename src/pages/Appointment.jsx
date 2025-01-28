@@ -25,7 +25,7 @@ const Appointment = () => {
     const docInfo = doctors.find(doc => doc._id === docId)
     setDocInfo(docInfo)
 
-    console.log("doctorInformation",docInfo)
+    console.log("doctorInformationn",docInfo)
   }
 
   const getAvailableSlots = async () => {
