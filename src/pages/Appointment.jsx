@@ -29,6 +29,8 @@ const Appointment = () => {
   }
 
   const getAvailableSlots = async () => {
+
+    if (!docInfo) return;
     //clear previous slots
     setDocSlot([])
 
@@ -128,7 +130,9 @@ const Appointment = () => {
   }, [doctors, docId])
 
   useEffect(() => {
-    getAvailableSlots()
+    if (docInfo) {     
+      getAvailableSlots()
+    }
   }, [docInfo])
 
   useEffect(() => {

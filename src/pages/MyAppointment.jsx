@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import Appointment from './Appointment'
 
 const MyAppointment = () => {
 
@@ -29,7 +30,7 @@ const MyAppointment = () => {
       console.log("data of user appointment",data)
       if (data) {
         setAppointments(data.appointments.reverse())
-        console.log("all appointments",appointments)
+        
       }
     } catch (error) {
       console.log("error in fetching all appointments",error)
@@ -66,6 +67,11 @@ const MyAppointment = () => {
   },[token])
 
 
+  useEffect(() => {
+    console.log("All Appointments of user :", appointments);
+  }, [appointments]);
+
+  
   return  (
     <div>
       
