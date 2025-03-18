@@ -113,13 +113,13 @@ const Appointment = () => {
         navigate('/my-appointments')
       }
       else{
-        toast.error(data?.message)
+        toast.error(data?.message || 'Failed to book appointment')
         console.log("this slot is already booked for this Doctor")
       }
 
     } catch (error) {
       console.log("error in ",error)
-      toast.error(error.message)
+      toast.error('Doctor is not available' || error.message)
     }
   }
 
